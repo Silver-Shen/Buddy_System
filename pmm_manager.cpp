@@ -35,9 +35,12 @@ struct Buddy_system
     }
 
     void traverse(buddy_node* node){
-        cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << ' ' << node->total_alloc << endl;
-        if (node->left) traverse(node->left);
-        if (node->right) traverse(node->right);
+        if (node->total_alloc || node->largest_free_size == node->end-node->start+1)
+            cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << ' ' << node->total_alloc << endl;
+        else{
+            if (node->left) traverse(node->left);
+            if (node->right) traverse(node->right);
+        }
     }
 
     int find_upper(int size){
@@ -109,8 +112,7 @@ int main(int argc, char const *argv[])
     cin >> buddy_system.total_size >> buddy_system.epsilon;
     //initialize the root node
     buddy_system.root = new buddy_node;
-    buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);
-    buddy_system.free(96);
+    buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);    
     buddy_system.traverse(buddy_system.root);
     while(1){
         int size;
