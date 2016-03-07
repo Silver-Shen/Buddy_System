@@ -9,6 +9,7 @@ struct buddy_node
     int start;
     int end;
     int largest_free_size;
+    bool total_alloc;
 };
 
 buddy_node* root;
@@ -18,6 +19,7 @@ void init_buddy(buddy_node* node, int l, int r){
     node->start = l;
     node->end = r;
     node->largest_free_size = r-l+1;
+    node->total_alloc = false;
     if (r-l+1>epsilon){
         node->left = new buddy_node;
         node->right = new buddy_node;
@@ -36,7 +38,7 @@ void traverse(buddy_node* node){
 }
 
 int malloc(int size){
-
+    
 }
 
 void free(){
