@@ -8,7 +8,7 @@ struct buddy_node
     buddy_node* right;
     int start;
     int end;
-    int largest_;
+    int largest_free_size;
 };
 
 buddy_node* root;
@@ -17,7 +17,7 @@ int total_size, epsilon;
 void init_buddy(buddy_node* node, int l, int r){
     node->start = l;
     node->end = r;
-    node->full = false;
+    node->largest_free_size = r-l+1;
     if (r-l+1>epsilon){
         node->left = new buddy_node;
         node->right = new buddy_node;
@@ -30,7 +30,7 @@ void init_buddy(buddy_node* node, int l, int r){
 }
  
 void traverse(buddy_node* node){
-    cout << node->start << ' ' << node->end << ' ' << node->full << endl;
+    cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << endl;
     if (node->left) traverse(node->left);
     if (node->right) traverse(node->right);
 }
