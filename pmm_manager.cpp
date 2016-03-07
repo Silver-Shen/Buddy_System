@@ -42,6 +42,14 @@ struct Buddy_system
     }
 
     void free(int addr){
+        __free(addr, root);
+    }
+
+    void __free(int addr, buddy_node* node){
+        if((node->start == addr)){
+
+        }else{
+        }
 
     }
 }buddy_system;
