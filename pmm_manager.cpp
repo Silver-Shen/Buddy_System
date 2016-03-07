@@ -82,6 +82,10 @@ struct Buddy_system
             node->largest_free_size = (node->end - node->start +1);
             return 1;
         }else{
+            if(node->left == NULL){
+                cout << "no malloc address" <<endl;
+                return 0;
+            }
             if(addr > node->left->end){
                 if(__free(addr, node->right)){
                     if(node->left->largest_free_size == (node->left->end - node->left->start +1)){
