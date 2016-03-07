@@ -61,7 +61,7 @@ struct Buddy_system
             return node->start;
         }
         //need split
-        int left = __malloc(node->left , size);       
+        int left = __malloc(node->left , size);
         int right = -1;
         if (left == -1) right = __malloc(node->right, size);
         node->largest_free_size = max(node->left->largest_free_size, node->right->largest_free_size);
@@ -69,6 +69,10 @@ struct Buddy_system
     }
 
     void free(int addr){
+        if(addr%epsilon){
+            cout << "bad input!" << endl;
+            return;
+        }
         __free(addr, root);
     }
 
@@ -110,13 +114,20 @@ int main(int argc, char const *argv[])
     //initialize the root node
     buddy_system.root = new buddy_node;
     buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);
-    buddy_system.free(96);
     buddy_system.traverse(buddy_system.root);
     while(1){
         int size;
-        cin >> size;
-        int address = buddy_system.malloc(size);
-        buddy_system.traverse(buddy_system.root);
-    }    
+        int kind;
+        cin >> size >> kind;
+        if(kind == 1){
+            int address = buddy_system.malloc(size);
+            buddy_system.traverse(buddy_system.root);
+            cout << address << endl;
+        }else{
+            buddy_system.free(size);
+            buddy_system.traverse(buddy_system.root);
+        }
+
+    }
     return 0;
 }
