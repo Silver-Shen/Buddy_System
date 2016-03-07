@@ -36,7 +36,7 @@ struct Buddy_system
 
     void traverse(buddy_node* node){
         if (node->total_alloc || node->largest_free_size == node->end-node->start+1)
-            cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << ' ' << node->total_alloc << endl;
+            cout << node->start << ' ' << node->end << ' ' << ((node->total_alloc)?"full":"empty") << endl;
         else{
             if (node->left) traverse(node->left);
             if (node->right) traverse(node->right);
@@ -116,13 +116,31 @@ struct Buddy_system
 
 int main(int argc, char const *argv[])
 {
-    cout << "Please enter the total size and threshold:" << endl;
-    cin >> buddy_system.total_size >> buddy_system.epsilon;
+    //cout << "Please enter the total size and threshold:" << endl;
+    //cin >> buddy_system.total_size >> buddy_system.epsilon;
+    buddy_system.total_size = 1024;
+    buddy_system.epsilon = 64;
     //initialize the root node
     buddy_system.root = new buddy_node;
-    buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);    
+    buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);
+    cout << "this is the initial state:" << endl;
     buddy_system.traverse(buddy_system.root);
-    while(1){
+
+    buddy_system.malloc(100);
+    buddy_system.malloc(240);
+    buddy_system.malloc(64);
+    buddy_system.malloc(256);
+    cout <<endl << "this is the middle state:" << endl;
+    buddy_system.traverse(buddy_system.root);
+    buddy_system.free(256);
+    buddy_system.free(0);
+    buddy_system.malloc(75);
+    buddy_system.free(128);
+    buddy_system.free(0);
+    buddy_system.free(512);
+    cout <<endl << "this is the final state:" << endl;
+    buddy_system.traverse(buddy_system.root);
+    /*while(1){
         int size;
         int kind;
         cin >> size >> kind;
@@ -134,7 +152,6 @@ int main(int argc, char const *argv[])
             buddy_system.free(size);
             buddy_system.traverse(buddy_system.root);
         }
-
-    }
+    }*/
     return 0;
 }
