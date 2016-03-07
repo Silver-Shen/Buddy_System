@@ -21,7 +21,6 @@ struct Buddy_system
         node->start = l;
         node->end = r;
         node->largest_free_size = r-l+1;
-        //node->total_alloc = false;
         node->total_alloc = false;
         if (r-l+1>epsilon){
             node->left = new buddy_node;
@@ -116,8 +115,6 @@ struct Buddy_system
 
 int main(int argc, char const *argv[])
 {
-    //cout << "Please enter the total size and threshold:" << endl;
-    //cin >> buddy_system.total_size >> buddy_system.epsilon;
     buddy_system.total_size = 1024;
     buddy_system.epsilon = 64;
     //initialize the root node
@@ -140,18 +137,5 @@ int main(int argc, char const *argv[])
     buddy_system.free(512);
     cout <<endl << "this is the final state:" << endl;
     buddy_system.traverse(buddy_system.root);
-    /*while(1){
-        int size;
-        int kind;
-        cin >> size >> kind;
-        if(kind == 1){
-            int address = buddy_system.malloc(size);
-            buddy_system.traverse(buddy_system.root);
-            cout << address << endl;
-        }else{
-            buddy_system.free(size);
-            buddy_system.traverse(buddy_system.root);
-        }
-    }*/
     return 0;
 }
