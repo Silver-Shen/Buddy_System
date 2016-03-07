@@ -34,22 +34,43 @@ struct Buddy_system
     }
 
     void traverse(buddy_node* node){
-        cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << endl;
+        cout << node->start << ' ' << node->end << ' ' << node->largest_free_size << ' ' << node->total_alloc << endl;
         if (node->left) traverse(node->left);
         if (node->right) traverse(node->right);
     }
 
-    int malloc(int size){
-        __
+    int find_upper(int size){
+        int s = epsilon;
+        while (s < size) s *= 2;
+        return s;
     }
-    
-    int __malloc(buddy_node* node, int size){
 
+    int malloc(int size){
+        int _size = find_upper(size);
+        return __malloc(root, _size);
+    }
+
+    int __malloc(buddy_node* node, int size){
+        //no enough space
+        if (node->largest_free_size < size) return -1;
+        //2^n-1<size<=2^n
+        if (size == node->end-node->start+1){
+            node->largest_free_size = 0;
+            node->total_alloc = true;
+            return node->start;
+        }
+        //need split
+        int left = __malloc(node->left , size);       
+        int right = -1;
+        if (left == -1) right = __malloc(node->right, size);
+        node->largest_free_size = max(node->left->largest_free_size, node->right->largest_free_size);
+        return max(left, right);
     }
 
     void free(int addr){
 
     }
+
 }buddy_system;
 
 int main(int argc, char const *argv[])
@@ -60,6 +81,11 @@ int main(int argc, char const *argv[])
     buddy_system.root = new buddy_node;
     buddy_system.init_buddy(buddy_system.root, 0, buddy_system.total_size-1);
     buddy_system.traverse(buddy_system.root);
-    int address = buddy_system.malloc(32);
+    while(1){
+        int size;
+        cin >> size;
+        int address = buddy_system.malloc(size);
+        buddy_system.traverse(buddy_system.root);
+    }    
     return 0;
 }
